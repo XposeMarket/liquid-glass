@@ -608,10 +608,12 @@ mountLiquidGlass(document.querySelector("#stage"), {
       ["edge wet · middle readable", "#9aa3ae"],
     ];
 
-    mountLiquidGlass(document.getElementById("stage"), {
+    const basePillWidth = 0.72;
+    const basePillHeight = 0.13;
+    const demo = mountLiquidGlass(document.getElementById("stage"), {
       spec: { ...DEFAULT_SPEC, blur: 0 },
-      w: 0.72,
-      h: 0.13,
+      w: basePillWidth,
+      h: basePillHeight,
       drawScene(ctx, w, h) {
         const g = ctx.createLinearGradient(0, 0, 0, h);
         g.addColorStop(0, "#334056");
@@ -628,6 +630,42 @@ mountLiquidGlass(document.querySelector("#stage"), {
           ctx.fillText(line[0], w * 0.07, startY + i * gap);
         });
       },
+    });
+
+    let pillScale = 1;
+    let pillScaleTarget = 1;
+    let pillScaleVelocity = 0;
+    let pillScaleFrame = 0;
+
+    function animatePillScale() {
+      pillScaleVelocity += (pillScaleTarget - pillScale) * 0.2;
+      pillScaleVelocity *= 0.7;
+      pillScale += pillScaleVelocity;
+      demo.state.w = basePillWidth * pillScale;
+      demo.state.h = basePillHeight * pillScale;
+
+      if (Math.abs(pillScaleTarget - pillScale) > 0.0004 || Math.abs(pillScaleVelocity) > 0.0004) {
+        pillScaleFrame = requestAnimationFrame(animatePillScale);
+      } else {
+        pillScale = pillScaleTarget;
+        pillScaleVelocity = 0;
+        demo.state.w = basePillWidth * pillScale;
+        demo.state.h = basePillHeight * pillScale;
+        pillScaleFrame = 0;
+      }
+    }
+
+    function setPillScale(target) {
+      pillScaleTarget = target;
+      if (!pillScaleFrame) pillScaleFrame = requestAnimationFrame(animatePillScale);
+    }
+
+    demo.glass.addEventListener("pointerdown", () => {
+      if (demo.state.dragging) setPillScale(1.045);
+    });
+
+    ["pointerup", "pointercancel", "lostpointercapture"].forEach((eventName) => {
+      demo.glass.addEventListener(eventName, () => setPillScale(1));
     });
   </script>
 </body>
