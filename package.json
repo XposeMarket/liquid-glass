@@ -1,0 +1,40 @@
+{
+  "name": "@xposemarket/liquid-glass",
+  "version": "0.1.0",
+  "description": "Canvas liquid glass: SDF rim refraction, shared blur, hairline top/bottom highlight. No CSS backdrop-filter.",
+  "type": "module",
+  "main": "./dist/liquid-glass.js",
+  "module": "./dist/liquid-glass.js",
+  "exports": {
+    ".": "./dist/liquid-glass.js",
+    "./vanilla": "./dist/liquid-glass.js"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "prepublishOnly": "node scripts/build.mjs"
+  },
+  "keywords": [
+    "liquid-glass",
+    "refraction",
+    "canvas",
+    "ui",
+    "glassmorphism",
+    "ios"
+  ],
+  "author": "Xpose Market",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XposeMarket/liquid-glass.git"
+  },
+  "bugs": {
+    "url": "https://github.com/XposeMarket/liquid-glass/issues"
+  },
+  "homepage": "https://github.com/XposeMarket/liquid-glass#readme"
+}

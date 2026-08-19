@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Liquid Glass — open source rim refraction</title>
+  <meta name="description" content="Canvas liquid glass. SDF rim refraction, shared blur, hairline top/bottom edge. No CSS backdrop-filter." />
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --text: #ececec;
+      --muted: #9aa0a8;
+      --line: rgba(255,255,255,.12);
+      --gold: #c9b27a;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", Segoe UI, sans-serif;
+    }
+    a { color: #8fd3ff; }
+    header {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 20px 8px;
+    }
+    header h1 { margin: 0 0 6px; font-size: 28px; letter-spacing: -0.03em; }
+    header p { margin: 0; color: var(--muted); }
+    .links { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; }
+    .stage-wrap {
+      max-width: 920px;
+      margin: 18px auto 0;
+      padding: 0 20px;
+    }
+    #stage {
+      position: relative;
+      height: min(72vh, 720px);
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #1a1e26;
+    }
+    section {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+    h2 { font-size: 16px; margin: 28px 0 10px; }
+    pre {
+      margin: 0;
+      padding: 14px 16px;
+      overflow: auto;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #121418;
+      color: #d7dde4;
+      font: 12.5px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .spec { color: var(--gold); font-size: 13px; }
+    footer { color: var(--muted); font-size: 12px; padding-top: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Liquid Glass</h1>
+    <p>Open-source canvas glass. Filleted slab, inward rim refraction, shared blur. Center stays readable.</p>
+    <div class="links">
+      <a href="https://github.com/XposeMarket/liquid-glass">GitHub</a>
+      <a href="https://github.com/XposeMarket/liquid-glass/blob/main/src/liquid-glass.js">Source</a>
+      <a href="https://www.npmjs.com/package/@xposemarket/liquid-glass">npm</a>
+    </div>
+  </header>
+
+  <div class="stage-wrap">
+    <div id="stage"></div>
+  </div>
+
+  <section>
+    <p class="spec">Locked spec · rim 32 · strength 20 · chroma 0.7 · spec 0.28 · fill 0.1 · blur 2.5</p>
+    <p>Drag the pill over the type. No sliders. This is the release look.</p>
+
+    <h2>Install</h2>
+    <pre>npm install github:XposeMarket/liquid-glass</pre>
+
+    <h2>Use</h2>
+    <pre>import { mountLiquidGlass, DEFAULT_SPEC } from "@xposemarket/liquid-glass";
+
+mountLiquidGlass(document.querySelector("#stage"), {
+  spec: DEFAULT_SPEC,
+  drawScene(ctx, w, h) {
+    ctx.fillStyle = "#1a1e26";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#f0f4f8";
+    ctx.font = "600 42px -apple-system, sans-serif";
+    ctx.fillText("drag the glass over this line", w * 0.07, h * 0.3);
+  }
+});</pre>
+
+    <h2>What it is</h2>
+    <pre>// 1 sample backdrop
+// 2 shared box blur
+// 3 SDF rounded-rect fillet
+// 4 warp only at the rim  (|d| keeps the core identity)
+// 5 inward refraction on both long edges
+// 6 RGB split only at grazing angles
+// 7 dark slab + faint white top/bottom hairline</pre>
+    <footer>MIT · Xpose Market · inspect the compositor on GitHub</footer>
+  </section>
+
+  <script type="module">
+    import { mountLiquidGlass, DEFAULT_SPEC } from "./src/liquid-glass.js";
+
+    const lines = [
+      ["confirmed mounted", "#8fd3ff"],
+      ["liquid glass compositor ready", "#f0f4f8"],
+      ["sample backdrop then SDF fillet", "#c8d0da"],
+      ["center identity · rim tangent shear", "#9aa3ae"],
+      ["RGB split only at grazing angles", "#d4bc7a"],
+      ["no CSS backdrop-filter on the pill", "#f0f4f8"],
+      ["drag me under the letters", "#8fd3ff"],
+      ["open source liquid glass", "#ffffff"],
+      ["filleted slab, not a bubble", "#c8d0da"],
+      ["edge wet · middle readable", "#9aa3ae"],
+    ];
+
+    mountLiquidGlass(document.getElementById("stage"), {
+      spec: DEFAULT_SPEC,
+      drawScene(ctx, w, h) {
+        const g = ctx.createLinearGradient(0, 0, 0, h);
+        g.addColorStop(0, "#334056");
+        g.addColorStop(1, "#151820");
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+        const fs = Math.max(18, Math.round(w * 0.042));
+        ctx.font = "600 " + fs + "px -apple-system, Segoe UI, sans-serif";
+        ctx.textBaseline = "middle";
+        const startY = h * 0.12;
+        const gap = fs * 2.05;
+        lines.forEach((line, i) => {
+          ctx.fillStyle = line[1];
+          ctx.fillText(line[0], w * 0.07, startY + i * gap);
+        });
+      },
+    });
+  </script>
+</body>
+</html>
