@@ -8,7 +8,6 @@ Locked spec from the Prometheus demo:
 rim 32 · strength 20 · chroma 0.7 · spec 0.28 · fill 0.1 · blur 2.5
 ```
 
-- Demo / landing: after Vercel deploy, this repo is the source of truth
 - GitHub: https://github.com/XposeMarket/liquid-glass
 
 ## Install
