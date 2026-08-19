@@ -298,18 +298,6 @@
       -webkit-touch-callout: none !important;
     }
 
-    .demo-foot {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 15px 18px 16px;
-      color: var(--muted);
-      font-size: 12px;
-      border-top: 1px solid var(--line);
-    }
-
-    .spec { color: var(--gold); }
-
     .details { padding: 76px 0; }
 
     .feature-grid {
@@ -450,7 +438,6 @@
       .demo-bar { align-items: flex-start; flex-direction: column; padding: 12px 14px; }
       .demo-tip { line-height: 1.35; }
       #stage { min-height: 420px; height: 58vh; }
-      .demo-foot { flex-direction: column; gap: 4px; }
       .feature { min-height: 160px; }
       footer { flex-direction: column; gap: 8px; }
     }
@@ -512,10 +499,6 @@
             <div class="demo-tip">Drag the pill with mouse or touch</div>
           </div>
           <div id="stage" aria-label="Interactive liquid glass demo"></div>
-          <div class="demo-foot">
-            <span class="spec">rim 32 · strength 20 · chroma 0.7 · spec 0.28 · fill 0.1 · blur 2.5</span>
-            <span>No sliders · locked release look</span>
-          </div>
         </div>
       </section>
 
@@ -627,6 +610,8 @@ mountLiquidGlass(document.querySelector("#stage"), {
 
     mountLiquidGlass(document.getElementById("stage"), {
       spec: DEFAULT_SPEC,
+      w: 0.72,
+      h: 0.13,
       drawScene(ctx, w, h) {
         const g = ctx.createLinearGradient(0, 0, 0, h);
         g.addColorStop(0, "#334056");
