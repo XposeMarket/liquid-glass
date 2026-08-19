@@ -611,7 +611,7 @@ mountLiquidGlass(document.querySelector("#stage"), {
     const basePillWidth = 0.72;
     const basePillHeight = 0.13;
     const demo = mountLiquidGlass(document.getElementById("stage"), {
-      spec: { ...DEFAULT_SPEC, blur: 0 },
+      spec: { ...DEFAULT_SPEC, blur: 0, fill: 0.16 },
       w: basePillWidth,
       h: basePillHeight,
       drawScene(ctx, w, h) {
