@@ -609,7 +609,7 @@ mountLiquidGlass(document.querySelector("#stage"), {
     ];
 
     mountLiquidGlass(document.getElementById("stage"), {
-      spec: DEFAULT_SPEC,
+      spec: { ...DEFAULT_SPEC, blur: 0 },
       w: 0.72,
       h: 0.13,
       drawScene(ctx, w, h) {
